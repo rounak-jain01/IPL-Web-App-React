@@ -14,7 +14,7 @@ function Home() {
     const options = {
       method: "GET",
       headers: {
-        "x-rapidapi-key": "4d48dc4b7fmshb450ade29dd5b31p135cb0jsn97bd28fc2fed",
+        'x-rapidapi-key': '31f74ca3ddmsh0fd2c743ae67e88p1d35e1jsna518de8e4549',
         "x-rapidapi-host": "cricbuzz-cricket.p.rapidapi.com",
       },
     };
@@ -32,7 +32,6 @@ function Home() {
     }
   }
 
-  //let data
   let data = {
     matchDetails: [
       {
@@ -4219,19 +4218,14 @@ function Home() {
   let filterData = data.matchDetails.filter(
     (singleMatch) => singleMatch["matchDetailsMap"]
   );
-
-  // matchesData.map((data) => (
-  //   console.log()
-  //   data.matchDetailsMap.match.map((singleMatch) => (
-  //     console.log(singleMatch.matchInfo.team1.teamId)
-  //   ))
-  // ))
+   
 
   return (
     <>
       <div>
         {matchesData.map((data) =>
           data.matchDetailsMap.match.map((singlematch, idx) => (
+
             // console.log(singlematch.matchInfo.team1.teamName)
             <div key={idx}>
               <Link to={`/MatchDetails/${singlematch.matchInfo.matchId}`}>
@@ -4245,6 +4239,7 @@ function Home() {
                 </h1>
               </Link>
             </div>
+
           ))
         )}
       </div>

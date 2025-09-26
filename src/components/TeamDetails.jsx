@@ -1,19 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 
+function TeamDetails({ teams, children }) {
+  const [index, setindex] = useState(0)  
 
-function TeamDetails({teams}) {
-
-
-
-
+  
   return (
     <>
+      {teams.map((data,i) => (
+        <button onClick={() => (setindex(i))}>{data}</button>
+      ))}
       {
-        teams.map((data) => (
-           <button>{data}</button> 
-        ))
+        children[index]
       }
     </>
+
   );
 }
 
