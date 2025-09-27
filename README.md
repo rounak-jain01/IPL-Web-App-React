@@ -2,7 +2,7 @@
 
 A dynamic and responsive web application built with React and Vite to display information about the Indian Premier League (IPL). Track your favorite teams, view match schedules, and check the latest points table.
 
-[Live Demo](https://example.com) ✨ (<- Add your deployment link here!)
+[Live Demo]([https://example.com](https://ipl-web-app-react.vercel.app/)) ✨ (<- Add your deployment link here!)
 
 ## 📸 Screenshot
 
