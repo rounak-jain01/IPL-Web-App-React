@@ -1,36 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function Match() {
+  let btn1Ref = useRef();
+  let btn2Ref = useRef();
+  let tabline = useRef();
+
   const [data, setData] = useState(null);
   const [playerData, setPdata] = useState(null);
-  const [index, setIndex] = useState(0); // 0 -> team1, 1 -> team2
+  const [index, setIndex] = useState(0);
   const { id } = useParams();
-
-  // Fetch match/team data when id changes
-  useEffect(() => {
-    async function fetchTeamData() {
-      const url = `https://cricbuzz-cricket.p.rapidapi.com/mcenter/v1/${id}`;
-      const options = {
-        method: "GET",
-        headers: {
-          "x-rapidapi-key": '31f74ca3ddmsh0fd2c743ae67e88p1d35e1jsna518de8e4549',
-          "x-rapidapi-host": "cricbuzz-cricket.p.rapidapi.com",
-        },
-      };
-      try {
-        const response = await fetch(url, options);
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        console.error(error);
-        setData(null);
-      }
-    }
-
-    // if (id) fetchTeamData();
-    setData(fixeddata);
-  }, [id]);
 
   let fixeddata = {
     matchid: 89654,
@@ -145,38 +124,6 @@ function Match() {
     islivestreamenabled: false,
     isfantasyhandbookenabled: false,
   };
-
-
-
-  // Fetch players whenever `data` is available or when `index` changes
-  useEffect(() => {
-    if (!data) return;
-
-    const teamId = index === 0 ? data.team1.teamid : data.team2.teamid;
-
-    async function fetchPlayerData(team) {
-      const url = `https://cricbuzz-cricket.p.rapidapi.com/mcenter/v1/${id}/team/${team}`;
-      const options = {
-        method: "GET",
-        headers: {
-          "x-rapidapi-key": '31f74ca3ddmsh0fd2c743ae67e88p1d35e1jsna518de8e4549',
-          "x-rapidapi-host": "cricbuzz-cricket.p.rapidapi.com",
-        },
-      };
-
-      try {
-        const response = await fetch(url, options);
-        const result = await response.json();
-        setPdata(result);
-      } catch (error) {
-        console.error(error);
-        setPdata(null);
-      }
-    }
-
-    // fetchPlayerData(teamId);
-    setPdata(playerdata);
-  }, [data, index, id]);
 
   let playerdata = {
     player: [
@@ -696,6 +643,68 @@ function Match() {
     ],
   };
 
+  useEffect(() => {
+    async function fetchTeamData() {
+      const url = `https://cricbuzz-cricket.p.rapidapi.com/mcenter/v1/${id}`;
+      const options = {
+        method: "GET",
+        headers: {
+          "x-rapidapi-key":
+            "31f74ca3ddmsh0fd2c743ae67e88p1d35e1jsna518de8e4549",
+          "x-rapidapi-host": "cricbuzz-cricket.p.rapidapi.com",
+        },
+      };
+      try {
+        const response = await fetch(url, options);
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error(error);
+        setData(null);
+      }
+    }
+
+    // if (id) fetchTeamData();
+    setData(fixeddata);
+  }, [id]);
+
+  useEffect(() => {
+    if (!data) return;
+
+    const teamId = index === 0 ? data.team1.teamid : data.team2.teamid;
+
+    async function fetchPlayerData(team) {
+      const url = `https://cricbuzz-cricket.p.rapidapi.com/mcenter/v1/${id}/team/${team}`;
+      const options = {
+        method: "GET",
+        headers: {
+          "x-rapidapi-key":
+            "31f74ca3ddmsh0fd2c743ae67e88p1d35e1jsna518de8e4549",
+          "x-rapidapi-host": "cricbuzz-cricket.p.rapidapi.com",
+        },
+      };
+
+      try {
+        const response = await fetch(url, options);
+        const result = await response.json();
+        setPdata(result);
+      } catch (error) {
+        console.error(error);
+        setPdata(null);
+      }
+    }
+
+    // fetchPlayerData(teamId);
+    setPdata(playerdata);
+  }, [data, index, id]);
+
+  useEffect(() => {
+    if (index === 0 && btn1Ref.current) {
+      togbtn(btn1Ref.current);
+    } else if (index === 1 && btn2Ref.current) {
+      togbtn(btn2Ref.current);
+    }
+  }, [index]);
 
   if (!data) {
     return (
@@ -709,46 +718,48 @@ function Match() {
   const team1Name = data.team1.teamsname;
   const team2Name = data.team2.teamsname;
 
+  function togbtn(btn) {
+    if (!btn || !tabline.current) return;
+    let { offsetWidth, offsetLeft } = btn;
+    tabline.current.style.width = offsetWidth + "px";
+    tabline.current.style.left = offsetLeft + "px";
+  }
+
   return (
     <div>
-      <h1>Match Details</h1>
+      <h1 className="mb-2">Match Details</h1>
 
-      {/* <TeamDetails teams={[team1Name, team2Name]} /> */}
-
-      {/* Two buttons: one for each team */}
-      <div style={{ margin: "12px 0" }}>
+      <div>
         <button
-          onClick={() => setIndex(0)}
-          style={{
-            marginRight: 8,
-            padding: "8px 12px",
-            borderRadius: 6,
-            cursor: "pointer",
-            fontWeight: index === 0 ? "700" : "400",
-            boxShadow: index === 0 ? "0 0 0 2px rgba(0,0,0,0.1)" : "none",
-          }}
+          ref={btn1Ref}
+          onClick={(e) => (setIndex(0), togbtn(e.target))}
+          className={
+            "bg-gray-100 rounded p-2 text-2xl px-15 " +
+            (index === 0 ? "text-black" : "text-gray-300")
+          }
         >
           {team1Name}
         </button>
 
         <button
-          onClick={() => setIndex(1)}
-          style={{
-            padding: "8px 12px",
-            borderRadius: 6,
-            cursor: "pointer",
-            fontWeight: index === 1 ? "700" : "400",
-            boxShadow: index === 1 ? "0 0 0 2px rgba(0,0,0,0.1)" : "none",
-          }}
+          ref={btn2Ref}
+          onClick={(e) => (setIndex(1), togbtn(e.target))}
+          className={
+            "bg-gray-100 rounded p-2 text-2xl px-15 " +
+            (index === 1 ? "text-black" : "text-gray-300")
+          }
         >
           {team2Name}
         </button>
+
+        <hr
+        ref={tabline}
+        className="absolute border-b-2 border-black transition-all duration-300"
+      />
       </div>
 
       <div>
-        <h2>
-          Player Details — {index === 0 ? team1Name : team2Name}
-        </h2>
+        <h2>{index === 0 ? team1Name : team2Name}</h2>
 
         {playerData && Array.isArray(playerData.player) ? (
           playerData.player.map((d, i) => (
