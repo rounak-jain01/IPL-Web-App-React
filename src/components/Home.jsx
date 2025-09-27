@@ -4222,26 +4222,144 @@ function Home() {
 
   return (
     <>
-      <div>
-        {matchesData.map((data) =>
-          data.matchDetailsMap.match.map((singlematch, idx) => (
+      {/* Background with animated gradient */}
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+        </div>
 
-            // console.log(singlematch.matchInfo.team1.teamName)
-            <div key={idx}>
-              <Link to={`/MatchDetails/${singlematch.matchInfo.matchId}`}>
-                <h1>
-                  {singlematch.matchInfo.team1.teamSName} vs{" "}
-                  {singlematch.matchInfo.team2.teamSName}
-                  {" - "}
-                  {data.matchDetailsMap.key}
-                  {", "}
-                  {singlematch.matchInfo.status}
+        {/* Main content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Header */}
+          <div className="text-center mb-12 animate-fade-in">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-orange-400 via-red-500 to-yellow-500 bg-clip-text text-transparent mb-4 animate-gradient">
+              IPL 2024 Dashboard
                 </h1>
+            <p className="text-gray-300 text-lg sm:text-xl font-light mb-6">
+              Live Scores • Match Results • Team Performance
+            </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto mt-4 rounded-full"></div>
+          </div>
+
+          {/* Matches Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {matchesData.map((data, dataIdx) =>
+              data.matchDetailsMap.match.map((singlematch, idx) => {
+                const matchId = singlematch.matchInfo.matchId;
+                const team1 = singlematch.matchInfo.team1;
+                const team2 = singlematch.matchInfo.team2;
+                const status = singlematch.matchInfo.status;
+                const date = data.matchDetailsMap.key;
+                const venue = singlematch.matchInfo.venueInfo;
+                
+                // Determine match status color
+                const getStatusColor = (status) => {
+                  if (status.includes('won')) return 'text-green-400';
+                  if (status.includes('abandoned')) return 'text-yellow-400';
+                  if (status.includes('tie')) return 'text-blue-400';
+                  return 'text-gray-300';
+                };
+
+                // Get team colors based on team name
+                const getTeamColors = (teamName) => {
+                  const colors = {
+                    'CSK': 'from-yellow-500 to-yellow-600',
+                    'RCB': 'from-red-500 to-red-600',
+                    'MI': 'from-blue-500 to-blue-600',
+                    'KKR': 'from-purple-500 to-purple-600',
+                    'DC': 'from-blue-400 to-blue-500',
+                    'PBKS': 'from-red-400 to-red-500',
+                    'RR': 'from-pink-500 to-pink-600',
+                    'SRH': 'from-orange-500 to-orange-600',
+                    'GT': 'from-gray-500 to-gray-600',
+                    'LSG': 'from-green-500 to-green-600'
+                  };
+                  return colors[teamName] || 'from-gray-500 to-gray-600';
+                };
+
+                return (
+                  <div
+                    key={`${dataIdx}-${idx}`}
+                    className="group relative bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 hover:bg-gray-800/70 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/20 animate-slide-up"
+                    style={{ animationDelay: `${idx * 100}ms` }}
+                  >
+                    {/* Card glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    {/* Match header */}
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-sm text-gray-400 font-medium">{date}</span>
+                        <div className="px-3 py-1 bg-gray-700/50 rounded-full">
+                          <span className="text-xs text-gray-300">{singlematch.matchInfo.matchDesc}</span>
+                        </div>
+                      </div>
+
+                      {/* Teams */}
+                      <div className="text-center mb-6">
+                        <div className="flex items-center justify-center space-x-6 mb-2">
+                          <div className="text-center group/team">
+                            <div className={`w-14 h-14 bg-gradient-to-br ${getTeamColors(team1.teamSName)} rounded-full flex items-center justify-center mb-2 mx-auto shadow-lg group-hover/team:scale-110 transition-transform duration-300 animate-float`}>
+                              <span className="text-white font-bold text-xs">{team1.teamSName}</span>
+                            </div>
+                            <p className="text-sm font-semibold text-gray-200 group-hover/team:text-white transition-colors duration-300">{team1.teamSName}</p>
+                          </div>
+                          
+                          <div className="text-gray-400 font-bold text-lg animate-pulse">VS</div>
+                          
+                          <div className="text-center group/team">
+                            <div className={`w-14 h-14 bg-gradient-to-br ${getTeamColors(team2.teamSName)} rounded-full flex items-center justify-center mb-2 mx-auto shadow-lg group-hover/team:scale-110 transition-transform duration-300 animate-float`} style={{ animationDelay: '0.5s' }}>
+                              <span className="text-white font-bold text-xs">{team2.teamSName}</span>
+                            </div>
+                            <p className="text-sm font-semibold text-gray-200 group-hover/team:text-white transition-colors duration-300">{team2.teamSName}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Venue */}
+                      <div className="mb-4 text-center">
+                        <p className="text-sm text-gray-400">
+                          <i className="fas fa-map-marker-alt mr-2"></i>
+                          {venue.ground}, {venue.city}
+                        </p>
+                      </div>
+
+                      {/* Status */}
+                      <div className="text-center mb-6">
+                        <p className={`text-sm font-medium ${getStatusColor(status)}`}>
+                          {status}
+                        </p>
+                      </div>
+
+                      {/* Action button */}
+                      <Link to={`/MatchDetails/${matchId}`}>
+                        <div className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25 flex items-center justify-center space-x-2 group/btn relative overflow-hidden">
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700"></div>
+                          <span className="relative z-10">View Details</span>
+                          <i className="fas fa-arrow-right group-hover/btn:translate-x-1 transition-transform duration-300 relative z-10"></i>
+                        </div>
               </Link>
             </div>
 
-          ))
-        )}
+                    {/* Decorative elements */}
+                    <div className="absolute top-4 right-4 w-2 h-2 bg-orange-500 rounded-full animate-ping"></div>
+                    <div className="absolute bottom-4 left-4 w-1 h-1 bg-red-500 rounded-full animate-pulse"></div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="text-center mt-16 animate-fade-in">
+            <p className="text-gray-400 text-sm">
+              Powered by React • Built with Tailwind CSS
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );

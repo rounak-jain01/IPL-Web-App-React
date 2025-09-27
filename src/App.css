@@ -1,7 +1,334 @@
-/* @import "tailwindcss";
+@import "tailwindcss";
+
+/* Custom animations for IPL Dashboard */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(251, 146, 60, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(251, 146, 60, 0.8), 0 0 30px rgba(251, 146, 60, 0.6);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Apply animations */
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #f97316, #dc2626);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #ea580c, #b91c1c);
+}
+
+/* Body styling */
 body {
-  background-color: #111827; 
-  background-image: radial-gradient(circle at 1px 1px, #374151 1px, transparent 0);
-  background-size: 2rem 2rem;
-} */
+  background-color: #111827;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition: all 0.3s ease;
+}
+
+/* Mobile responsiveness fixes */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .text-5xl {
+    font-size: 2.5rem;
+  }
+  
+  .text-4xl {
+    font-size: 2rem;
+  }
+  
+  .text-3xl {
+    font-size: 1.75rem;
+  }
+  
+  .grid-cols-8 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  
+  .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .py-4 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
+/* Tablet responsiveness */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid-cols-8 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* Focus styles */
+button:focus,
+a:focus {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+
+/* Additional animations for MatchDetails */
+@keyframes teamSwitch {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes playerCardHover {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(-5px) scale(1.02);
+  }
+}
+
+@keyframes tabIndicator {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Apply additional animations */
+.animate-team-switch {
+  animation: teamSwitch 0.3s ease-in-out;
+}
+
+.animate-player-hover {
+  animation: playerCardHover 0.3s ease-out forwards;
+}
+
+.animate-tab-indicator {
+  animation: tabIndicator 0.3s ease-out;
+}
+
+/* Enhanced hover effects */
+.player-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.player-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(251, 146, 60, 0.15);
+}
+
+/* Team tab enhancements */
+.team-tab {
+  position: relative;
+  overflow: hidden;
+}
+
+.team-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.team-tab:hover::before {
+  left: 100%;
+}
+
+/* Navbar specific animations */
+@keyframes navbarSlideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(5deg);
+  }
+}
+
+@keyframes navLinkHover {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes liveIndicator {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+}
+
+/* Apply navbar animations */
+.animate-navbar-slide {
+  animation: navbarSlideDown 0.6s ease-out;
+}
+
+.animate-logo-float {
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+.animate-nav-hover {
+  animation: navLinkHover 0.3s ease-in-out;
+}
+
+.animate-live-indicator {
+  animation: liveIndicator 2s ease-in-out infinite;
+}
+
+/* Navbar hover effects */
+.nav-link {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.nav-link:hover::before {
+  left: 100%;
+}
+
+/* Enhanced navbar styling */
+.navbar-brand {
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+}
 

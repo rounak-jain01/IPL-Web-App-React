@@ -1797,45 +1797,205 @@ function PointsTable() {
     pointsTableData.pointsTable[0].pointsTableInfo
   );
 
+  // Get team colors based on team name
+  const getTeamColors = (teamName) => {
+    const colors = {
+      'CSK': 'from-yellow-500 to-yellow-600',
+      'RCB': 'from-red-500 to-red-600',
+      'MI': 'from-blue-500 to-blue-600',
+      'KKR': 'from-purple-500 to-purple-600',
+      'DC': 'from-blue-400 to-blue-500',
+      'PBKS': 'from-red-400 to-red-500',
+      'RR': 'from-pink-500 to-pink-600',
+      'SRH': 'from-orange-500 to-orange-600',
+      'GT': 'from-gray-500 to-gray-600',
+      'LSG': 'from-green-500 to-green-600'
+    };
+    return colors[teamName] || 'from-gray-500 to-gray-600';
+  };
+
+  const getTeamTextColors = (teamName) => {
+    const colors = {
+      'CSK': 'text-yellow-400',
+      'RCB': 'text-red-400',
+      'MI': 'text-blue-400',
+      'KKR': 'text-purple-400',
+      'DC': 'text-blue-300',
+      'PBKS': 'text-red-300',
+      'RR': 'text-pink-400',
+      'SRH': 'text-orange-400',
+      'GT': 'text-gray-400',
+      'LSG': 'text-green-400'
+    };
+    return colors[teamName] || 'text-gray-400';
+  };
+
   return (
-    <>
-      <div>PointsTable</div>
-      {tableData.map(
-        (
-          {
-            form,
-            matchesLost,
-            matchesPlayed,
-            matchesWon,
-            teamName,
-            nrr,
-            points,
-          },
-          i
-        ) => (
-          <div key={i} className="flex gap-5 ">
-            <span>{i + 1}</span>
-            <span>{teamName}</span>
-            <span>{matchesPlayed}</span>
-            <span>{matchesWon}</span>
-            <span>{matchesLost}</span>
-            <span>{nrr}</span>
-            <span>{points}</span>
-            <span className="gap-2 flex">
-              {form
-                .reverse()
-                .map((data) =>
-                  data === "W" ? (
-                    <i className="fi fi-ss-check-circle text-green-500"></i>
-                  ) : (
-                    <i className="fi fi-sr-cross-circle text-red-600"></i>
-                  )
-                )}
-            </span>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="text-center mb-12 animate-fade-in">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-orange-400 via-red-500 to-yellow-500 bg-clip-text text-transparent mb-4 animate-gradient">
+            IPL 2024 Points Table
+          </h1>
+          <p className="text-gray-300 text-lg sm:text-xl font-light">
+            Team Standings • Match Statistics • Performance Analysis
+          </p>
+          <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        {/* Points Table */}
+        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl overflow-hidden shadow-2xl animate-slide-up">
+          {/* Table Header */}
+          <div className="bg-gradient-to-r from-gray-700/50 to-gray-600/50 px-4 sm:px-6 py-4 border-b border-gray-600/50">
+            <div className="grid grid-cols-8 gap-2 sm:gap-4 text-xs sm:text-sm font-semibold text-gray-300">
+              <div className="text-center">#</div>
+              <div className="text-left">Team</div>
+              <div className="text-center hidden sm:block">Matches</div>
+              <div className="text-center hidden sm:block">Won</div>
+              <div className="text-center hidden sm:block">Lost</div>
+              <div className="text-center">NRR</div>
+              <div className="text-center">Points</div>
+              <div className="text-center">Form</div>
+            </div>
           </div>
-        )
-      )}
-    </>
+
+          {/* Table Body */}
+          <div className="divide-y divide-gray-700/50">
+            {tableData.map(
+              (
+                {
+                  form,
+                  matchesLost,
+                  matchesPlayed,
+                  matchesWon,
+                  teamName,
+                  nrr,
+                  points,
+                  teamQualifyStatus,
+                },
+                i
+              ) => (
+                <div 
+                  key={i} 
+                  className={`group px-4 sm:px-6 py-4 hover:bg-gray-700/30 transition-all duration-300 ${
+                    i < 4 ? 'bg-gradient-to-r from-green-500/5 to-emerald-500/5' : ''
+                  }`}
+                  style={{ animationDelay: `${i * 100}ms` }}
+                >
+                  <div className="grid grid-cols-8 gap-2 sm:gap-4 items-center">
+                    {/* Position */}
+                    <div className="text-center">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                        i < 4 
+                          ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white' 
+                          : 'bg-gray-600 text-gray-300'
+                      }`}>
+                        {i + 1}
+                      </div>
+                    </div>
+
+                    {/* Team */}
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-10 h-10 bg-gradient-to-br ${getTeamColors(teamName)} rounded-full flex items-center justify-center shadow-lg`}>
+                        <span className="text-white font-bold text-xs">{teamName}</span>
+                      </div>
+                      <div>
+                        <p className={`font-semibold ${getTeamTextColors(teamName)} group-hover:text-white transition-colors duration-300`}>
+                          {teamName}
+                        </p>
+                        {teamQualifyStatus === 'Q' && (
+                          <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full">
+                            Qualified
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Matches Played */}
+                    <div className="text-center text-gray-300 font-medium hidden sm:block">
+                      {matchesPlayed}
+                    </div>
+
+                    {/* Matches Won */}
+                    <div className="text-center text-green-400 font-semibold hidden sm:block">
+                      {matchesWon}
+                    </div>
+
+                    {/* Matches Lost */}
+                    <div className="text-center text-red-400 font-semibold hidden sm:block">
+                      {matchesLost}
+                    </div>
+
+                    {/* NRR */}
+                    <div className="text-center">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        parseFloat(nrr) >= 0 
+                          ? 'bg-green-500/20 text-green-400' 
+                          : 'bg-red-500/20 text-red-400'
+                      }`}>
+                        {nrr}
+                      </span>
+                    </div>
+
+                    {/* Points */}
+                    <div className="text-center">
+                      <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        {points}
+                      </span>
+                    </div>
+
+                    {/* Form */}
+                    <div className="flex justify-center space-x-1">
+                      {form.slice().reverse().map((result, idx) => (
+                        <div key={idx} className="w-6 h-6 rounded-full flex items-center justify-center">
+                          {result === "W" ? (
+                            <i className="fas fa-check text-green-400 text-xs"></i>
+                          ) : result === "L" ? (
+                            <i className="fas fa-times text-red-400 text-xs"></i>
+                          ) : (
+                            <i className="fas fa-minus text-gray-400 text-xs"></i>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        </div>
+
+        {/* Legend */}
+        <div className="mt-8 flex justify-center space-x-8 animate-fade-in">
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            <span className="text-gray-400 text-sm">Qualified for Playoffs</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+            <span className="text-gray-400 text-sm">Top 4 Teams</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+            <span className="text-gray-400 text-sm">Eliminated</span>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-16 animate-fade-in">
+          <p className="text-gray-400 text-sm">
+            Updated after all league matches • Playoffs qualification based on points and NRR
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
 
